@@ -1,14 +1,16 @@
 let fields = [
     null,
-    'circle',
-    'circle',
-    'circle',
     null,
     null,
-    'cross',
-    'cross',
+    null,
+    null,
+    null,
+    null,
+    null,
     null,
 ];
+
+let currentPlayer = 'circle'; // Startspieler festlegen
 
 function init(){
     render();
@@ -21,7 +23,7 @@ function render() {
         table += '<tr>';
         for (let j = 0; j < 3; j++) {
             let index = i * 3 + j;
-            table += '<td>';
+            table += '<td onclick="handleClick(' + index + ')">';
             if (fields[index] === 'circle') {
                 table += generateAnimatedCircleSVG();
             } else if (fields[index] === 'cross') {
@@ -34,6 +36,16 @@ function render() {
     table += '</table>';
     content.innerHTML = table;
 }
+
+function handleClick(index) {
+    if (fields[index] === null) {
+        fields[index] = currentPlayer;
+        document.getElementById('content').getElementsByTagName('td')[index].innerHTML = currentPlayer === 'circle' ? generateAnimatedCircleSVG() : generateAnimatedCrossSVG();
+        currentPlayer = currentPlayer === 'circle' ? 'cross' : 'circle'; // Spieler wechseln
+    }
+    document.getElementById('content').getElementsByTagName('td')[index].onclick = null;
+}
+
 
 function generateAnimatedCircleSVG() {
     const svgCode = `
@@ -69,6 +81,4 @@ function generateAnimatedCrossSVG() {
     return svgCode;
 }
 
-const cross = generateAnimatedCrossSVG();
-console.log(svgHTML);
 
