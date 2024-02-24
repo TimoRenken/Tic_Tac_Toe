@@ -44,3 +44,45 @@ table {
   table tr td:last-child {
     border-right: 0;
   }
+
+.d_flex_c_c{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+button {
+    /* Aussehen */
+    width: 200px;
+    height: 50px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    /* Farbe */
+    color: white;
+    background-color: #4CAF50;
+    /* Schriftart */
+    font-size: 20px;
+    font-weight: bold;
+    /* Schatten */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    /* Animation */
+    transition: all 0.3s;
+    margin-top: 64px;
+  }
+  
+  button:hover {
+    /* Farbe ändern beim Hover */
+    background-color: #3E8E41;
+  }
+  
+  button:active {
+    /* Schatten reduzieren beim Klicken */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    transform: translateY(4px);
+  }
+
+  .highlight {
+    color: red; /* Ändern Sie die Farbe nach Belieben */
+    text-shadow: 0 0 5px #ff0000; /* Fügt einen leuchtenden Effekt hinzu */
+}
+  

@@ -18,7 +18,6 @@ const WINNING_COMBINATIONS = [
 
 let currentPlayer = 'circle';
 
-
 function init() {
     render();
 }
@@ -37,6 +36,10 @@ function render() {
             } else if (fields[index] === 'cross') {
                 symbol = generateCrossSVG();
             }
+             // Hervorhebung des aktuellen Spielers
+             if (currentPlayer === fields[index]) {
+                symbol = `<span class="highlight">${symbol}</span>`;
+            }
             tableHtml += `<td onclick="handleClick(this, ${index})">${symbol}</td>`;
         }
         tableHtml += '</tr>';
@@ -46,6 +49,11 @@ function render() {
     contentDiv.innerHTML = tableHtml;
 }
 function handleClick(cell, index) {
+    // Überprüfen, ob das Spiel beendet ist, bevor ein Zug gemacht wird
+    if (isGameFinished()) {
+        return;
+    }
+
     if (fields[index] === null) {
         fields[index] = currentPlayer;
         cell.innerHTML = currentPlayer === 'circle' ? generateCircleSVG() : generateCrossSVG();
@@ -71,6 +79,48 @@ function getWinningCombination() {
         }
     }
     return null;
+}
+
+function drawWinningLine(combination) {
+    const lineColor = '#ffffff';
+    const lineWidth = 5;
+    const startCell = document.querySelectorAll(`td`)[combination[0]];
+    const endCell = document.querySelectorAll(`td`)[combination[2]];
+    const contentDiv = document.getElementById('content');
+    const contentRect = contentDiv.getBoundingClientRect();
+    const startRect = startCell.getBoundingClientRect();
+    const endRect = endCell.getBoundingClientRect();
+
+    const lineLength = Math.sqrt(
+        Math.pow(endRect.left - startRect.left, 2) + Math.pow(endRect.top - startRect.top, 2)
+    );
+    const lineAngle = Math.atan2(endRect.top - startRect.top, endRect.left - startRect.left);
+
+    const line = document.createElement('div');
+    line.style.position = 'absolute';
+    line.style.width = `${lineLength}px`;
+    line.style.height = `${lineWidth}px`;
+    line.style.backgroundColor = lineColor;
+    line.style.top = `${startRect.top + startRect.height / 2 - lineWidth / 2 - contentRect.top}px`;
+    line.style.left = `${startRect.left + startRect.width / 2 - contentRect.left}px`;
+    line.style.transform = `rotate(${lineAngle}rad)`;
+    line.style.transformOrigin = `top left`;
+    contentDiv.appendChild(line);
+}
+
+function restartGame() {
+    fields = [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+    ];
+    init();
 }
 
 function generateCircleSVG() {
@@ -103,32 +153,3 @@ function generateCrossSVG() {
     `;
     return svgHtml;
 }
-
-function drawWinningLine(combination) {
-    const lineColor = '#ffffff';
-    const lineWidth = 5;
-    const startCell = document.querySelectorAll(`td`)[combination[0]];
-    const endCell = document.querySelectorAll(`td`)[combination[2]];
-    const contentDiv = document.getElementById('content');
-    const contentRect = contentDiv.getBoundingClientRect();
-    const startRect = startCell.getBoundingClientRect();
-    const endRect = endCell.getBoundingClientRect();
-
-    const lineLength = Math.sqrt(
-        Math.pow(endRect.left - startRect.left, 2) + Math.pow(endRect.top - startRect.top, 2)
-    );
-    const lineAngle = Math.atan2(endRect.top - startRect.top, endRect.left - startRect.left);
-
-    const line = document.createElement('div');
-    line.style.position = 'absolute';
-    line.style.width = `${lineLength}px`;
-    line.style.height = `${lineWidth}px`;
-    line.style.backgroundColor = lineColor;
-    line.style.top = `${startRect.top + startRect.height / 2 - lineWidth / 2 - contentRect.top}px`;
-    line.style.left = `${startRect.left + startRect.width / 2 - contentRect.left}px`;
-    line.style.transform = `rotate(${lineAngle}rad)`;
-    line.style.transformOrigin = `top left`;
-    contentDiv.appendChild(line);
-}
-
-
