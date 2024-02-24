@@ -9,6 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     margin-top: 300px;
+    position: relative;
 }
 h1{
     text-align: center;
